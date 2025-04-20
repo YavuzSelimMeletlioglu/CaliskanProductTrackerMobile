@@ -1,5 +1,5 @@
 import { get } from "@/src/api/api";
-import { Product } from "@/src/types/types";
+import { ProductMovements } from "@/src/types/types";
 import { Stack, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native";
@@ -11,23 +11,37 @@ const dateConfig: Intl.DateTimeFormatOptions = {
   day: "2-digit",
 };
 
+const massConfig: Intl.NumberFormatOptions = {
+  style: "unit",
+  unit: "kilogram",
+  unitDisplay: "narrow",
+};
+
 export default function Owner() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductMovements[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(true);
   const router = useRouter();
   const fetchData = async () => {
-    const response = await get("/urunler");
+    const response = await get("/movements");
 
     if (response && response.success) {
-      const modifiedData = response.data.map((item: Product) => {
-        return {
-          ...item,
-          incoming_date: new Date(item.incoming_date),
-          outgoing_date: item.outgoing_date
-            ? new Date(item.outgoing_date)
-            : null,
-        };
-      });
+      const modifiedData: ProductMovements[] = response.data.map(
+        (item: any) => {
+          return {
+            ...item,
+            last_movement_date: new Date(item.last_movement_date),
+            total_incoming: parseInt(item.total_incoming),
+            total_outgoing: parseInt(item.total_outgoing),
+            remaining_mass: parseInt(item.remaining_mass),
+            percentage:
+              parseInt(item.total_incoming) <= 0
+                ? 0
+                : (parseInt(item.remaining_mass) /
+                    parseInt(item.total_incoming)) *
+                  100,
+          };
+        }
+      );
       setProducts(modifiedData);
     }
     setIsRefreshing(false);
@@ -38,39 +52,46 @@ export default function Owner() {
     fetchData();
   }, []);
 
-  const renderItem = ({ item }: { item: Product }) => {
+  const renderItem = ({ item }: { item: ProductMovements }) => {
     return (
-      <View style={styles.contentContainer}>
+      <View
+        style={[
+          styles.contentContainer,
+          {
+            backgroundColor:
+              item.last_movement_type === "incoming" ? "green" : "red",
+          },
+        ]}>
         <View style={styles.rowContainer}>
           <Text style={styles.itemText}>{item.company_name}</Text>
-          <Text style={styles.itemText}>{item.product_type}</Text>
+          <Text style={styles.itemText}>{item.product_name}</Text>
         </View>
         <View style={styles.rowContainer}>
-          <Text style={styles.itemText}>
-            {item.incoming_mass.toLocaleString("tr", {
-              style: "unit",
-              unit: "kilogram",
-              unitDisplay: "narrow",
-            })}
-          </Text>
-          <Text style={styles.itemText}>
-            {item.incoming_date.toLocaleDateString("tr", dateConfig)}
-          </Text>
-        </View>
-        {item.outgoing_date !== null && (
-          <View style={styles.rowContainer}>
+          <View style={{ flex: 1 }}>
+            <Text>Toplam Gelen:</Text>
             <Text style={styles.itemText}>
-              {item.outgoing_mass?.toLocaleString("tr", {
-                style: "unit",
-                unit: "kilogram",
-                unitDisplay: "narrow",
-              })}
-            </Text>
-            <Text style={styles.itemText}>
-              {item.outgoing_date.toLocaleDateString("tr", dateConfig)}
+              {item.total_incoming.toLocaleString("tr", massConfig)}
             </Text>
           </View>
-        )}
+          <View style={{ flex: 1, maxWidth: "50%" }}>
+            <Text>Son Hareket Tarihi:</Text>
+            <Text style={styles.itemText}>
+              {item.last_movement_date.toLocaleDateString("tr", dateConfig)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.rowContainer}>
+          <View style={{ flex: 1 }}>
+            <Text>Toplam Giden:</Text>
+            <Text style={styles.itemText}>
+              {item.total_outgoing.toLocaleString("tr", massConfig)}
+            </Text>
+          </View>
+          <View style={{ flex: 1, maxWidth: "50%" }}>
+            <Text>% Alınan Çinko:</Text>
+            <Text style={styles.itemText}>{item.percentage}%</Text>
+          </View>
+        </View>
       </View>
     );
   };
@@ -106,6 +127,11 @@ export default function Owner() {
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
+        ListEmptyComponent={
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={styles.itemText}>Liste Boş</Text>
+          </View>
+        }
       />
     </View>
   );
@@ -130,14 +156,16 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   rowContainer: {
+    width: "100%",
     alignItems: "center",
     columnGap: 10,
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   itemText: {
     color: "#000",
     fontSize: 20,
     fontWeight: "bold",
-    width: "48%",
+    flex: 1,
   },
 });

@@ -15,7 +15,7 @@ export type InnerProducts = {
     product_name: string;
     company_name: string;
     remaining_mass: number;
-    last_movement: Date | null;
+    last_incoming_date: Date | null;
     last_movement_type: "incoming" | "outgoing"
 }
 
@@ -28,4 +28,6 @@ export type ProductMovements = {
     total_outgoing: number
     remaining_mass: number
     last_movement_date: Date
+    percentage: number
+    last_movement_type: string
 }

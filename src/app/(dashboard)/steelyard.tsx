@@ -11,6 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const dateConfig: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -30,7 +31,7 @@ export default function Enterer() {
   const router = useRouter();
 
   const fetchData = async () => {
-    const response = await get("/products/inners");
+    const response = await get("/movements/inners");
 
     if (response && response.success) {
       const modifiedData: InnerProducts[] = response.data.map((item: any) => {
@@ -39,8 +40,8 @@ export default function Enterer() {
           total_incoming: parseFloat(item.total_incoming),
           total_outgoing: parseFloat(item.total_outgoing),
           remaining_mass: parseFloat(item.remaining_mass),
-          last_movement: item.last_movement
-            ? new Date(item.last_movement)
+          last_incoming_date: item.last_incoming_date
+            ? new Date(item.last_incoming_date)
             : null,
         };
       });
@@ -57,13 +58,7 @@ export default function Enterer() {
   const renderItem = ({ item }: { item: InnerProducts }) => {
     return (
       <Pressable
-        style={[
-          styles.contentContainer,
-          {
-            backgroundColor:
-              item.last_movement_type === "incoming" ? "green" : "red",
-          },
-        ]}
+        style={styles.contentContainer}
         onPress={() =>
           router.push({
             pathname: "/operations/add-product",
@@ -85,10 +80,10 @@ export default function Enterer() {
             </Text>
           </View>
           <View style={{ flex: 1, maxWidth: "50%" }}>
-            <Text>Son teslimat Tarihi:</Text>
+            <Text>Son Gelen Tarihi:</Text>
             <Text style={styles.itemText}>
-              {item.last_movement !== null
-                ? item.last_movement.toLocaleDateString("tr", dateConfig)
+              {item.last_incoming_date !== null
+                ? item.last_incoming_date.toLocaleDateString("tr", dateConfig)
                 : "NULL"}
             </Text>
           </View>
@@ -113,12 +108,21 @@ export default function Enterer() {
         options={{
           headerTitle: "",
           headerRight: () => (
-            <AntDesign
-              name="plus"
-              size={24}
-              color="black"
-              onPress={() => router.push("/operations/add-product")}
-            />
+            <View
+              style={{ flexDirection: "row", columnGap: 20, marginRight: 5 }}>
+              <AntDesign
+                name="plus"
+                size={24}
+                color="black"
+                onPress={() => router.push("/operations/add-product")}
+              />
+              <MaterialIcons
+                name="logout"
+                size={24}
+                color="black"
+                onPress={logout}
+              />
+            </View>
           ),
         }}
       />
@@ -127,6 +131,11 @@ export default function Enterer() {
         renderItem={({ item }) => renderItem({ item })}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={styles.itemText}>Liste Boş</Text>
+          </View>
         }
       />
     </View>

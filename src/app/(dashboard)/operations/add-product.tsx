@@ -13,7 +13,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { get, post } from "@/src/api/api";
 import { Company, Product } from "@/src/types/types";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   RadioButton,
   Text as PaperText,
@@ -50,7 +50,7 @@ export default function SonHareketEkle() {
   const [newCompanyName, setNewCompanyName] = useState("");
   const [movementType, setMovementType] = useState("incoming");
   const [mass, setMass] = useState<string>("");
-
+  const router = useRouter();
   useEffect(() => {
     fetchProducts();
     fetchCompanies();
@@ -79,11 +79,12 @@ export default function SonHareketEkle() {
       mass: parseInt(mass),
     };
 
-    const response = await post("products/add-movement", payload);
+    const response = await post("movements/add-movement", payload);
 
     if (response.success) {
       Alert.alert("Başarılı", "Hareket eklendi");
       setMass("");
+      router.back();
     } else {
       Alert.alert("Hata", "Hareket eklenemedi");
     }
