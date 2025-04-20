@@ -1,18 +1,22 @@
+export type Company = {
+    id: number
+    name: string
+}
+
 export type Product = {
-    product_id: number;
-    product_type: string;
-    company_name: string;
-    incoming_mass: number;
-    incoming_date: Date;
-    outgoing_mass: number;
-    outgoing_date: Date | null;
+    id: number;
+    name: string;
+    project_code: string | null
 }
 
 export type InnerProducts = {
-    product_type: string;
+    product_id: number;
+    company_id: number;
+    product_name: string;
     company_name: string;
     remaining_mass: number;
-    outgoing_date: Date | null;
+    last_movement: Date | null;
+    last_movement_type: "incoming" | "outgoing"
 }
 
 export type ProductMovements = {
