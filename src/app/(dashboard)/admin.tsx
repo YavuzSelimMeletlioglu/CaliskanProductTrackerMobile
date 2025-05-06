@@ -1,4 +1,6 @@
-import { Stores } from "@/src/pages/Stores";
+import { AcidBaths } from "@/src/pages/AcidBaths";
+import AssignedJobs from "@/src/pages/AssignedJobs";
+import { InnerProducts } from "@/src/pages/InnerProducts";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { BottomNavigation } from "react-native-paper";
@@ -9,19 +11,25 @@ type RouteProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
 };
 
-export default function Steelyard() {
+export default function Admin() {
   const [index, setIndex] = useState(0);
 
   const routes: RouteProps[] = [
-    { key: "stores", title: "Hazır", icon: "check-circle-outline" },
+    { key: "assigned_jobs", title: "Atanan Ürünler", icon: "assignment" },
+    { key: "inners", title: "İçeridekiler", icon: "inbox" },
+    { key: "acid_baths", title: "Asit Banyoları", icon: "calendar-view-week" },
   ];
 
   const renderScene = ({ route }: { route: RouteProps }) => {
     switch (route.key) {
-      case "stores":
-        return <Stores />;
+      case "assigned_jobs":
+        return <AssignedJobs />;
+      case "acid_baths":
+        return <AcidBaths />;
+      case "inners":
+        return <InnerProducts isAdmin={true} />;
       default:
-        return <Stores />;
+        return <AssignedJobs />;
     }
   };
 

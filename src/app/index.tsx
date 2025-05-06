@@ -23,11 +23,20 @@ export default function Index() {
       const response = await post("/auth", { username, password });
       if (response.success) {
         switch (response.data.user_role) {
-          case 1:
+          case 7:
             router.push("/(dashboard)/owner");
+            break;
+          case 6:
+            router.push("/(dashboard)/admin");
             break;
           case 3:
             router.push("/(dashboard)/steelyard");
+            break;
+          case 2:
+            router.push("/(dashboard)/crane-overlooker");
+            break;
+          case 1:
+            router.push("/(dashboard)/cleaning-overlooker");
             break;
           default:
             Alert.alert("Uyarı", "Kullanıcı rolü atanmamış!");

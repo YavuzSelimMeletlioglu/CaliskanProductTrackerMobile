@@ -1,4 +1,7 @@
-import { Stores } from "@/src/pages/Stores";
+import { AcidBaths } from "@/src/pages/AcidBaths";
+import AssignedJobs from "@/src/pages/AssignedJobs";
+import { InnerProducts } from "@/src/pages/InnerProducts";
+import { Processes } from "@/src/pages/Processes";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { BottomNavigation } from "react-native-paper";
@@ -9,19 +12,19 @@ type RouteProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
 };
 
-export default function Steelyard() {
+export default function CleaningOverlooker() {
   const [index, setIndex] = useState(0);
 
   const routes: RouteProps[] = [
-    { key: "stores", title: "Hazır", icon: "check-circle-outline" },
+    { key: "process", title: "İşlemdekiler", icon: "autorenew" },
   ];
 
   const renderScene = ({ route }: { route: RouteProps }) => {
     switch (route.key) {
-      case "stores":
-        return <Stores />;
+      case "process":
+        return <Processes />;
       default:
-        return <Stores />;
+        return <Processes />;
     }
   };
 

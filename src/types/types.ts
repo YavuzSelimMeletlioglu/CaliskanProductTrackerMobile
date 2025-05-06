@@ -9,25 +9,79 @@ export type Product = {
     project_code: string | null
 }
 
-export type InnerProducts = {
-    product_id: number;
-    company_id: number;
-    product_name: string;
+export type Incoming = {
     company_name: string;
-    remaining_mass: number;
-    last_incoming_date: Date | null;
-    last_movement_type: "incoming" | "outgoing"
+    product_name: string;
+    company_id: number;
+    product_id: number;
+    quantity: number;
+    created_at: Date;
 }
 
-export type ProductMovements = {
-    company_id: number
-    company_name: string,
-    product_id: number
-    product_name: string
-    total_incoming: number
-    total_outgoing: number
-    remaining_mass: number
-    last_movement_date: Date
-    percentage: number
-    last_movement_type: string
+export type Process = {
+    company_name: string;
+    product_name: string;
+    company_id: number;
+    product_id: number;
+    quantity: number;
+    created_at: Date;
 }
+
+export type Store = {
+    company_name: string;
+    product_name: string;
+    company_id: number;
+    product_id: number;
+    quantity: number;
+    created_at: Date;
+}
+
+export type TotalIncoming = {
+    company_name: string;
+    product_name: string;
+    company_id: number;
+    product_id: number;
+    mass: number;
+    created_at: Date;
+}
+
+export type Assignment = {
+    incoming_id: number
+    company_name: string;
+    product_name: string;
+    company_id: number;
+    product_id: number;
+    quantity: number;
+    created_at: Date;
+}
+
+export type ApiResponse<T> = {
+    success: boolean;
+    data?: T;
+    message?: string;
+}
+
+export type OperationPostBody = {
+    company_id: number;
+    product_id: number;
+    quantity: number;
+}
+
+export type TotalIncomingPostBody = {
+    company_id: number;
+    product_id: number;
+    mass: number;
+}
+
+export type ListModalProps = {
+    company_id: number;
+    product_id: number;
+    isAssignment?: boolean;
+    visible: boolean;
+    onDismiss: () => void;
+};
+
+export type GraphProps = {
+    api_url: string;
+    select_url: string;
+};
