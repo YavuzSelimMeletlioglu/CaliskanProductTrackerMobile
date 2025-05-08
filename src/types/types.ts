@@ -85,3 +85,11 @@ export type GraphProps = {
     api_url: string;
     graphType: "monthly" | "yearly"
 };
+
+export type AcidBath = {
+    pool_number: number
+    company_name: string
+    product_name: string
+    remaining_time: number
+    is_active: boolean
+}

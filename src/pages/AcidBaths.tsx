@@ -1,41 +1,46 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { AcidBathCard } from "../modals/AcidBathCard";
+import { get } from "../api/api";
+import { useEffect, useState } from "react";
+import { AcidBath } from "../types/types";
 
 export function AcidBaths() {
+  const [baths, setBaths] = useState<AcidBath[]>([]);
+
+  const fetchData = async () => {
+    const response = await get("pools/list-pools");
+    if (response && response.success) {
+      setBaths(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <AcidBathCard
-        id={1}
-        remainingTime={30}
-        isOccupied={true}
-        onPress={() => null}
-        company_name="ERL"
-        product_name="U Profil"
-      />
-      <AcidBathCard
-        id={2}
-        remainingTime={10}
-        isOccupied={true}
-        onPress={() => null}
-        company_name="C Profil"
-        product_name="Boru"
-      />
-      <AcidBathCard
-        id={3}
-        remainingTime={5}
-        isOccupied={true}
-        onPress={() => null}
-        company_name="C Profil"
-        product_name="Boru"
-      />
-      <AcidBathCard
-        id={4}
-        remainingTime={0}
-        isOccupied={false}
-        onPress={() => null}
-        company_name="C Profil"
-        product_name="Boru"
-      />
-    </View>
+    <ScrollView
+      contentContainerStyle={{
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1,
+      }}>
+      {baths.map((item, index) => (
+        <AcidBathCard
+          pool_number={item.pool_number ?? index}
+          remainingTime={item.remaining_time ?? 0}
+          isOccupied={item.is_active}
+          onPress={() => null}
+          company_name={item.company_name ?? ""}
+          product_name={item.product_name ?? ""}
+        />
+      ))}
+    </ScrollView>
   );
+}
+
+{
+  /**
+ 
+  */
 }

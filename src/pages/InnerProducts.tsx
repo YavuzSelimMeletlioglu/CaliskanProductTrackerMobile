@@ -98,7 +98,6 @@ export function InnerProducts({ isAdmin }: InnerProductsProps) {
     <>
       <Appbar.Header>
         <Appbar.Content title="" />
-        <Appbar.Action icon="plus" onPress={() => setIsVisible(true)} />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <View style={styles.container}>

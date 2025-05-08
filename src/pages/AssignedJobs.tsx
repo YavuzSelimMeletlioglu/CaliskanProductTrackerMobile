@@ -18,6 +18,12 @@ const AssignedJobs = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [assignedJobs, setAssignedJobs] = useState<Assignment[]>([]);
   const [visible, setIsVisible] = useState(false);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
+    null
+  );
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+    null
+  );
 
   const fetch = async () => {
     setIsRefreshing(true);
@@ -38,12 +44,16 @@ const AssignedJobs = () => {
     return (
       <TouchableOpacity
         style={styles.contentContainer}
-        onPress={() => setIsVisible(true)}>
+        onPress={() => {
+          setSelectedCompanyId(item.company_id);
+          setSelectedProductId(item.product_id);
+          setIsVisible(true);
+        }}>
         <AddProcessorAssignment
           visible={visible}
           onDismiss={() => setIsVisible(false)}
-          company_id={item.company_id}
-          product_id={item.product_id}
+          company_id={selectedCompanyId ?? 1}
+          product_id={selectedProductId ?? 1}
           isAssignment={false}
         />
         <View

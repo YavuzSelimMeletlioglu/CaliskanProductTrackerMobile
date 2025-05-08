@@ -33,7 +33,7 @@ export function IncomingGraphsScreen() {
   return (
     <Provider>
       <Appbar.Header>
-        <Appbar.Content title="Net Çıkan Ürünler" />
+        <Appbar.Content title="Net Gelen Ürünler" />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <ScrollView
@@ -49,7 +49,7 @@ export function IncomingGraphsScreen() {
               justifyContent: "space-between",
             }}>
             <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-              Şirket Bazlı Gelen Ürünler
+              Şirket Bazlı Gelen Kilo
             </Text>
             <View style={styles.selectContainer}>
               <Menu
@@ -110,7 +110,7 @@ export function IncomingGraphsScreen() {
 
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-            Ürün Bazlı Gelen Ürünler
+            Ürün Bazlı Gelen Kilo
           </Text>
           <DirectionalGraph
             api_url={`/incoming-graph-data-by-product?company_id=${selectedCompany}&type=${graphType}`}

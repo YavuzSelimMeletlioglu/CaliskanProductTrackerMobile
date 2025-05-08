@@ -58,10 +58,10 @@ export function BiDirectional({ api_url, graphType }: GraphProps) {
         yAxisLabelWidth={50}
         noOfSections={5}
         showVerticalLines
-        labelsDistanceFromXaxis={15}
         barBorderTopLeftRadius={5}
         barBorderTopRightRadius={5}
-        xAxisTextNumberOfLines={0}
+        rotateLabel
+        labelWidth={30}
         hideRules
         xAxisThickness={0}
         yAxisThickness={0}
@@ -96,7 +96,7 @@ export function BiDirectional({ api_url, graphType }: GraphProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 300,
+    height: 320,
     backgroundColor: "#fff",
     justifyContent: "center",
     borderRadius: 10,

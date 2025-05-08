@@ -48,7 +48,7 @@ export function NetGraph() {
               justifyContent: "space-between",
             }}>
             <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-              Şirket Bazlı Giden-Gelen Ürünler
+              Şirket Bazlı Giden-Gelen Kilo
             </Text>
             <View style={styles.selectContainer}>
               <Menu
@@ -109,7 +109,7 @@ export function NetGraph() {
 
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-            Ürün Bazlı Giden-Gelen Ürünler
+            Ürün Bazlı Giden-Gelen Kilo
           </Text>
           <BiDirectional
             api_url={`/net-graph-data-by-product?company_id=${selectedCompany}&type=${graphType}`}
