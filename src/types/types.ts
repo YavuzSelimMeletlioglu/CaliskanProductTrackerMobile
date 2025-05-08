@@ -83,5 +83,5 @@ export type ListModalProps = {
 
 export type GraphProps = {
     api_url: string;
-    select_url: string;
+    graphType: "monthly" | "yearly"
 };

@@ -47,7 +47,6 @@ export function AddMovement({
   }, []);
 
   useEffect(() => {
-    console.log("Comp ", company_id, " Product ", product_id);
     setCompanyId(company_id || 1);
     setProductId(product_id || 1);
   }, [company_id, product_id]);

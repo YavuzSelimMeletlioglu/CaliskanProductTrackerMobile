@@ -46,6 +46,7 @@ export function Stores() {
         onPress={() => {
           setSelectedCompanyId(item.company_id);
           setSelectedProductId(item.product_id);
+          console.log(item.company_id, " ", selectedCompanyId);
           setOutgoingModalVisible(true);
         }}>
         <AddMovement

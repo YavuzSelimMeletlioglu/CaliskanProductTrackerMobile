@@ -1,6 +1,8 @@
 import { AcidBaths } from "@/src/pages/AcidBaths";
 import AssignedJobs from "@/src/pages/AssignedJobs";
 import { InnerProducts } from "@/src/pages/InnerProducts";
+import { Processes } from "@/src/pages/Processes";
+import { Stores } from "@/src/pages/Stores";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { BottomNavigation } from "react-native-paper";
@@ -15,19 +17,22 @@ export default function Admin() {
   const [index, setIndex] = useState(0);
 
   const routes: RouteProps[] = [
-    { key: "assigned_jobs", title: "Atanan Ürünler", icon: "assignment" },
     { key: "inners", title: "İçeridekiler", icon: "inbox" },
+    { key: "process", title: "İşlemdekiler", icon: "autorenew" },
     { key: "acid_baths", title: "Asit Banyoları", icon: "calendar-view-week" },
+    { key: "stores", title: "Hazır", icon: "check-circle-outline" },
   ];
 
   const renderScene = ({ route }: { route: RouteProps }) => {
     switch (route.key) {
-      case "assigned_jobs":
-        return <AssignedJobs />;
+      case "process":
+        return <Processes />;
       case "acid_baths":
         return <AcidBaths />;
       case "inners":
         return <InnerProducts isAdmin={true} />;
+      case "stores":
+        return <Stores />;
       default:
         return <AssignedJobs />;
     }

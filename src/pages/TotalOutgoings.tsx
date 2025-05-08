@@ -1,9 +1,35 @@
-import { ScrollView, View, Text } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { DirectionalGraph } from "@/src/components/DirectionalGraph";
-import { Appbar, Provider } from "react-native-paper";
+import { Appbar, Menu, Provider } from "react-native-paper";
 import { logout } from "../functions";
+import { LineGraph } from "../components/LineGraph";
+import { useEffect, useState } from "react";
+import { Company } from "../types/types";
+import { get } from "../api/api";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export function OutgoingGraphsScreen() {
+  const [selectedCompany, setSelectedCompany] = useState(0);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [graphType, setGraphType] = useState<"monthly" | "yearly">("monthly");
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const fetchCompanies = async () => {
+    const response = await get("companies");
+    setCompanies(response.data);
+    setSelectedCompany(response.data[0]?.id);
+  };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
   return (
     <Provider>
       <Appbar.Header>
@@ -16,25 +42,112 @@ export function OutgoingGraphsScreen() {
           rowGap: 10,
         }}>
         <View style={{ marginVertical: 10 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-            Şirket Bazlı Gelen Ürünler
-          </Text>
-          <DirectionalGraph
-            api_url="/outgoing-graph-data?company_id="
-            select_url="companies"
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
+              Şirket Bazlı Gelen Ürünler
+            </Text>
+            <View style={styles.selectContainer}>
+              <Menu
+                visible={menuVisible}
+                onDismiss={() => setMenuVisible(false)}
+                anchor={
+                  <TouchableOpacity
+                    onPress={() => setMenuVisible(true)}
+                    style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      {selectedCompany
+                        ? companies.find((c) => c.id === selectedCompany)?.name
+                        : "Firma Seçin"}
+                    </Text>
+                    <MaterialIcons
+                      name="keyboard-arrow-down"
+                      size={24}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                }>
+                {companies.map((company) => (
+                  <Menu.Item
+                    key={company.id}
+                    onPress={() => {
+                      setSelectedCompany(company.id);
+                      setMenuVisible(false);
+                    }}
+                    title={company.name}
+                  />
+                ))}
+              </Menu>
+            </View>
+          </View>
+          <LineGraph
+            api_url={`/outgoing-graph-data?company_id=${selectedCompany}&type=${graphType}`}
+            graphType={graphType}
           />
+          <View style={styles.dateContainer}>
+            <TouchableOpacity onPress={() => setGraphType("monthly")}>
+              <Text
+                style={{
+                  fontWeight: graphType === "monthly" ? "bold" : "normal",
+                }}>
+                Aylık
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setGraphType("yearly")}>
+              <Text
+                style={{
+                  fontWeight: graphType === "yearly" ? "bold" : "normal",
+                }}>
+                Yıllık
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={{ marginVertical: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-            Ürün Bazlı Gelen Ürünler
+            Ürün Bazlı Giden Ürünler
           </Text>
           <DirectionalGraph
-            api_url="/outgoing-graph-data-by-product?product_id="
-            select_url="products"
+            api_url={`/outgoing-graph-data-by-product?company_id=${selectedCompany}&type=${graphType}`}
+            graphType={graphType}
           />
         </View>
       </ScrollView>
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 330,
+    backgroundColor: "#fff",
+    justifyContent: "flex-end",
+    borderRadius: 10,
+    padding: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  selectContainer: {
+    alignSelf: "flex-end",
+    flexShrink: 1,
+    marginRight: 10,
+    padding: 5,
+    borderColor: "#ccc",
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+    columnGap: 10,
+  },
+  chartText: {
+    textAlign: "center",
+    alignSelf: "center",
+    width: 70,
+  },
+});
