@@ -15,6 +15,7 @@ export default function CraneOverlooker() {
   const [index, setIndex] = useState(0);
 
   const routes: RouteProps[] = [
+    { key: "inners", title: "İçeridekiler", icon: "inbox" },
     { key: "assigned_jobs", title: "Atanan Ürünler", icon: "assignment" },
     { key: "acid_baths", title: "Asit Banyoları", icon: "calendar-view-week" },
   ];
@@ -25,6 +26,8 @@ export default function CraneOverlooker() {
         return <AssignedJobs />;
       case "acid_baths":
         return <AcidBaths />;
+      case "inners":
+        return <InnerProducts isAdmin={false} />;
       default:
         return <AssignedJobs />;
     }

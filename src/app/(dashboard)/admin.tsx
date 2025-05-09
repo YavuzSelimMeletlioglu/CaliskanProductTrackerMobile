@@ -6,6 +6,7 @@ import { Stores } from "@/src/pages/Stores";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { BottomNavigation } from "react-native-paper";
+import Performance from "@/src/pages/Performance";
 
 type RouteProps = {
   key: string;
@@ -18,7 +19,8 @@ export default function Admin() {
 
   const routes: RouteProps[] = [
     { key: "inners", title: "İçeridekiler", icon: "inbox" },
-    { key: "process", title: "İşlemdekiler", icon: "autorenew" },
+    { key: "performance", title: "Performans", icon: "access-time" },
+    { key: "process", title: "İşlem dekiler", icon: "autorenew" },
     { key: "acid_baths", title: "Asit Banyoları", icon: "calendar-view-week" },
     { key: "stores", title: "Hazır", icon: "check-circle-outline" },
   ];
@@ -33,6 +35,8 @@ export default function Admin() {
         return <InnerProducts isAdmin={true} />;
       case "stores":
         return <Stores />;
+      case "performance":
+        return <Performance />;
       default:
         return <AssignedJobs />;
     }

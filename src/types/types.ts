@@ -93,3 +93,15 @@ export type AcidBath = {
     remaining_time: number
     is_active: boolean
 }
+
+export type TotalPerformanceType = {
+    company_name: string
+    product_name: string
+    total_time_minutes: number
+}
+
+export type UnitPerformanceType = {
+    company_name: string
+    product_name: string
+    avg_minutes_per_unit: string
+}
