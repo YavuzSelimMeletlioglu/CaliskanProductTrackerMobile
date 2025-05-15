@@ -24,7 +24,12 @@ export default function Index() {
       if (response.success) {
         switch (response.data.user_role) {
           case 1:
-            router.push("/(dashboard)/owner");
+            router.push({
+              pathname: "/(dashboard)/owner",
+              params: {
+                email: response.data.email,
+              },
+            });
             break;
           case 2:
             router.push("/(dashboard)/admin");
@@ -33,7 +38,12 @@ export default function Index() {
             router.push("/(dashboard)/steelyard");
             break;
           case 4:
-            router.push("/(dashboard)/crane-overlooker");
+            router.push({
+              pathname: "/(dashboard)/crane-overlooker",
+              params: {
+                user_id: response.data.user_id,
+              },
+            });
             break;
           case 5:
             router.push("/(dashboard)/cleaning-overlooker");

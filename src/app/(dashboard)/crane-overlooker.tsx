@@ -2,7 +2,9 @@ import { AcidBaths } from "@/src/pages/AcidBaths";
 import AssignedJobs from "@/src/pages/AssignedJobs";
 import { InnerProducts } from "@/src/pages/InnerProducts";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { View } from "react-native";
 import { BottomNavigation } from "react-native-paper";
 
 type RouteProps = {
@@ -13,7 +15,7 @@ type RouteProps = {
 
 export default function CraneOverlooker() {
   const [index, setIndex] = useState(0);
-
+  const { user_id } = useLocalSearchParams<{ user_id: string }>();
   const routes: RouteProps[] = [
     { key: "inners", title: "İçeridekiler", icon: "inbox" },
     { key: "assigned_jobs", title: "Atanan Ürünler", icon: "assignment" },
@@ -23,7 +25,7 @@ export default function CraneOverlooker() {
   const renderScene = ({ route }: { route: RouteProps }) => {
     switch (route.key) {
       case "assigned_jobs":
-        return <AssignedJobs />;
+        return <AssignedJobs user_id={user_id} />;
       case "acid_baths":
         return <AcidBaths />;
       case "inners":
@@ -34,7 +36,7 @@ export default function CraneOverlooker() {
   };
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       {renderScene({ route: routes[index] })}
       <BottomNavigation.Bar
         navigationState={{ index, routes }}
@@ -49,6 +51,6 @@ export default function CraneOverlooker() {
         )}
         getLabelText={({ route }) => route.title}
       />
-    </>
+    </View>
   );
 }

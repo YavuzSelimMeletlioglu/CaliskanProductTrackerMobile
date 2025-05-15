@@ -46,13 +46,16 @@ export type TotalIncoming = {
 }
 
 export type Assignment = {
-    incoming_id: number
+    assignment_id: number
     company_name: string;
     product_name: string;
     company_id: number;
     product_id: number;
     quantity: number;
-    created_at: Date;
+    user_id: number,
+    user_name: string,
+    last_date_completion: Date;
+    completed_quantity: number
 }
 
 export type ApiResponse<T> = {
@@ -76,7 +79,9 @@ export type TotalIncomingPostBody = {
 export type ListModalProps = {
     company_id: number;
     product_id: number;
-    isAssignment?: boolean;
+    isAdmin?: boolean;
+    fromAssignments?: boolean
+    assignment_id?: number
     visible: boolean;
     onDismiss: () => void;
 };
@@ -104,4 +109,8 @@ export type UnitPerformanceType = {
     company_name: string
     product_name: string
     avg_minutes_per_unit: string
+}
+
+export type GraphScreenProps = {
+    email: string
 }

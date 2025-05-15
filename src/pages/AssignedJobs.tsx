@@ -11,10 +11,14 @@ import React, { useEffect, useState } from "react";
 import { get } from "../api/api";
 import { Assignment } from "../types/types";
 import { Appbar } from "react-native-paper";
-import { logout } from "../functions";
+import { dateConfig, logout } from "../functions";
 import { AddProcessorAssignment } from "../modals/AddProcessOrAssignment";
 
-const AssignedJobs = () => {
+type Props = {
+  user_id?: string;
+};
+
+const AssignedJobs = ({ user_id }: Props) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [assignedJobs, setAssignedJobs] = useState<Assignment[]>([]);
   const [visible, setIsVisible] = useState(false);
@@ -27,9 +31,18 @@ const AssignedJobs = () => {
 
   const fetch = async () => {
     setIsRefreshing(true);
-    const response = await get("assignments");
+    const response = await get(`assignments/${user_id ?? ""}`);
     if (response && response.success) {
-      setAssignedJobs(response.data);
+      console.log(response.data);
+      const modifiedData: Assignment[] = response.data.map(
+        (item: Assignment) => {
+          return {
+            ...item,
+            last_date_completion: new Date(item.last_date_completion),
+          };
+        }
+      );
+      setAssignedJobs(modifiedData);
     } else {
       Alert.alert("Uyarı", response.error);
     }
@@ -54,7 +67,9 @@ const AssignedJobs = () => {
           onDismiss={() => setIsVisible(false)}
           company_id={selectedCompanyId ?? 1}
           product_id={selectedProductId ?? 1}
-          isAssignment={false}
+          assignment_id={item.assignment_id}
+          isAdmin={false}
+          fromAssignments={true}
         />
         <View
           style={{
@@ -66,6 +81,14 @@ const AssignedJobs = () => {
           <Text style={styles.itemText}>{item.company_name}</Text>
           <Text style={styles.itemText}>{item.product_name}</Text>
           <Text style={styles.itemText}>{item.quantity} adet</Text>
+        </View>
+        <View style={styles.rowContainer}>
+          <Text style={styles.itemText}>
+            Tamamlanan: {item.completed_quantity}
+          </Text>
+          <Text style={styles.itemText}>
+            {item.last_date_completion.toLocaleDateString("tr", dateConfig)}
+          </Text>
         </View>
       </TouchableOpacity>
     );

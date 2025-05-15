@@ -11,10 +11,10 @@ import { logout } from "../functions";
 import { LineGraph } from "../components/LineGraph";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState, useEffect } from "react";
-import { get } from "../api/api";
-import { Company } from "../types/types";
+import { get, post } from "../api/api";
+import { Company, GraphScreenProps } from "../types/types";
 
-export function NetGraph() {
+export function NetGraph({ email }: GraphScreenProps) {
   const [selectedCompany, setSelectedCompany] = useState(0);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [graphType, setGraphType] = useState<"monthly" | "yearly">("monthly");
@@ -29,10 +29,19 @@ export function NetGraph() {
   useEffect(() => {
     fetchCompanies();
   }, []);
+
+  const extractPdf = async () => {
+    await post("send-multi-company-report", {
+      email: email,
+      endpoint_type: "net",
+    });
+  };
+
   return (
     <Provider>
       <Appbar.Header>
         <Appbar.Content title="Net Ürün Girdi-Çıktı" />
+        <Appbar.Action icon="file-pdf-box" onPress={extractPdf} />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <ScrollView

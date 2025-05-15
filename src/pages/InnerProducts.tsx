@@ -12,6 +12,8 @@ import {
 import { Appbar } from "react-native-paper";
 import { dateConfig, logout } from "../functions";
 import { AddProcessorAssignment } from "../modals/AddProcessOrAssignment";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { ProductAssignmentPie } from "../components/ProdutAssignmentPie";
 
 type InnerProductsProps = {
   isAdmin: boolean;
@@ -27,6 +29,7 @@ export function InnerProducts({ isAdmin }: InnerProductsProps) {
   );
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [visible, setIsVisible] = useState(false);
+  const [chartVisible, setChartVisible] = useState(false);
 
   const fetchData = async () => {
     const response = await get("operations/incomings");
@@ -67,11 +70,30 @@ export function InnerProducts({ isAdmin }: InnerProductsProps) {
           onDismiss={() => setIsVisible(false)}
           company_id={selectedCompanyId || 0}
           product_id={selectedProductId || 0}
-          isAssignment={isAdmin}
+          isAdmin={isAdmin}
+          fromAssignments={false}
+        />
+        <ProductAssignmentPie
+          visible={chartVisible}
+          onClose={() => setChartVisible(false)}
+          company_id={selectedCompanyId || 0}
+          product_id={selectedProductId || 0}
         />
         <View style={styles.rowContainer}>
           <Text style={styles.itemText}>{item.company_name}</Text>
           <Text style={styles.itemText}>{item.product_name}</Text>
+          {isAdmin && (
+            <MaterialIcons
+              name="assignment"
+              size={24}
+              style={{ alignSelf: "flex-end" }}
+              onPress={() => {
+                setSelectedCompanyId(item.company_id);
+                setSelectedProductId(item.product_id);
+                setChartVisible(true);
+              }}
+            />
+          )}
         </View>
         <View style={styles.rowContainer}>
           <View style={{ flex: 1 }}>
@@ -84,6 +106,7 @@ export function InnerProducts({ isAdmin }: InnerProductsProps) {
               {item.created_at.toLocaleString("tr", dateConfig)}
             </Text>
           </View>
+          {isAdmin && <View style={{ width: 24 }} />}
         </View>
       </TouchableOpacity>
     );

@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { get } from "../api/api";
 import { TotalPerformanceType, UnitPerformanceType } from "../types/types";
 import { ListBox } from "../components/ListBox";
+import { Appbar } from "react-native-paper";
+import { logout } from "../functions";
 
 export default function Performance() {
   const [totalData, setTotalData] = useState<TotalPerformanceType[]>([]);
@@ -72,28 +74,38 @@ export default function Performance() {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={{ paddingVertical: 40, justifyContent: "center" }}>
-      <View style={styles.container}>
-        <ListBox
-          text="Ürünlere Göre Harcanan Süre"
-          hasSelection
-          rowInfoData={["Şirket", "Ürün", "Toplam Süre"]}
-          selectionTexts={["En Çok", "En Az"]}
-          data={totalData}
-          handlePress={toggleTotalData}
-        />
+    <>
+      <Appbar.Header>
+        <Appbar.Content title="" />
+        <Appbar.Action icon="logout" onPress={logout} />
+      </Appbar.Header>
 
-        <ListBox
-          text="Adetlere Göre Harcanan Süre"
-          hasSelection
-          rowInfoData={["Şirket", "Ürün", "Süre/Adet"]}
-          selectionTexts={["En Çok", "En Az"]}
-          data={unitData}
-          handlePress={toggleUnitData}
-        />
-      </View>
-    </ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          paddingVertical: 20,
+        }}>
+        <View style={styles.container}>
+          <ListBox
+            text="Ürünlere Göre Harcanan Süre"
+            hasSelection
+            rowInfoData={["Şirket", "Ürün", "Toplam Süre"]}
+            selectionTexts={["En Çok", "En Az"]}
+            data={totalData}
+            handlePress={toggleTotalData}
+          />
+
+          <ListBox
+            text="Adetlere Göre Harcanan Süre"
+            hasSelection
+            rowInfoData={["Şirket", "Ürün", "Süre/Adet"]}
+            selectionTexts={["En Çok", "En Az"]}
+            data={unitData}
+            handlePress={toggleUnitData}
+          />
+        </View>
+      </ScrollView>
+    </>
   );
 }
 

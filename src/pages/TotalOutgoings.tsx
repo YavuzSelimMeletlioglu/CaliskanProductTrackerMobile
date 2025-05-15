@@ -10,11 +10,11 @@ import { Appbar, Menu, Provider } from "react-native-paper";
 import { logout } from "../functions";
 import { LineGraph } from "../components/LineGraph";
 import { useEffect, useState } from "react";
-import { Company } from "../types/types";
-import { get } from "../api/api";
+import { Company, GraphScreenProps } from "../types/types";
+import { get, post } from "../api/api";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-export function OutgoingGraphsScreen() {
+export function OutgoingGraphsScreen({ email }: GraphScreenProps) {
   const [selectedCompany, setSelectedCompany] = useState(0);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [graphType, setGraphType] = useState<"monthly" | "yearly">("monthly");
@@ -30,10 +30,18 @@ export function OutgoingGraphsScreen() {
     fetchCompanies();
   }, []);
 
+  const extractPdf = async () => {
+    await post("send-multi-company-report", {
+      email: email,
+      endpoint_type: "outgoing",
+    });
+  };
+
   return (
     <Provider>
       <Appbar.Header>
         <Appbar.Content title="Net Giden Ürünler" />
+        <Appbar.Action icon="file-pdf-box" onPress={extractPdf} />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <ScrollView

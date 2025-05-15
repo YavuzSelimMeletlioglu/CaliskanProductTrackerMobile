@@ -18,8 +18,9 @@ export default function Admin() {
   const [index, setIndex] = useState(0);
 
   const routes: RouteProps[] = [
-    { key: "inners", title: "İçeridekiler", icon: "inbox" },
-    { key: "performance", title: "Performans", icon: "access-time" },
+    { key: "inners", title: "İçeri dekiler", icon: "inbox" },
+    { key: "performance", title: "Perfor mans", icon: "access-time" },
+    { key: "assigned_jobs", title: "Atanan Ürünler", icon: "assignment" },
     { key: "process", title: "İşlem dekiler", icon: "autorenew" },
     { key: "acid_baths", title: "Asit Banyoları", icon: "calendar-view-week" },
     { key: "stores", title: "Hazır", icon: "check-circle-outline" },
@@ -29,6 +30,8 @@ export default function Admin() {
     switch (route.key) {
       case "process":
         return <Processes />;
+      case "assigned_jobs":
+        return <AssignedJobs />;
       case "acid_baths":
         return <AcidBaths />;
       case "inners":

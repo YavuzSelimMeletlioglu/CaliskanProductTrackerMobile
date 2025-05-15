@@ -10,11 +10,12 @@ import { DirectionalGraph } from "../components/DirectionalGraph";
 import { logout } from "../functions";
 import { LineGraph } from "../components/LineGraph";
 import { useEffect, useState } from "react";
-import { get } from "../api/api";
+import { get, post } from "../api/api";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Company } from "../types/types";
+import { Company, GraphScreenProps } from "../types/types";
+import { useLocalSearchParams } from "expo-router";
 
-export function IncomingGraphsScreen() {
+export function IncomingGraphsScreen({ email }: GraphScreenProps) {
   const [selectedCompany, setSelectedCompany] = useState(0);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [graphType, setGraphType] = useState<"monthly" | "yearly">("monthly");
@@ -30,10 +31,18 @@ export function IncomingGraphsScreen() {
     fetchCompanies();
   }, []);
 
+  const extractPdf = async () => {
+    await post("send-multi-company-report", {
+      email: email,
+      endpoint_type: "incoming",
+    });
+  };
+
   return (
     <Provider>
       <Appbar.Header>
         <Appbar.Content title="Net Gelen Ürünler" />
+        <Appbar.Action icon="file-pdf-box" onPress={extractPdf} />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <ScrollView

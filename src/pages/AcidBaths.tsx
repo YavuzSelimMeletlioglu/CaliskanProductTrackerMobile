@@ -3,6 +3,8 @@ import { AcidBathCard } from "../modals/AcidBathCard";
 import { get } from "../api/api";
 import { useEffect, useState } from "react";
 import { AcidBath } from "../types/types";
+import { Appbar } from "react-native-paper";
+import { logout } from "../functions";
 
 export function AcidBaths() {
   const [baths, setBaths] = useState<AcidBath[]>([]);
@@ -19,23 +21,31 @@ export function AcidBaths() {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-      }}>
-      {baths.map((item, index) => (
-        <AcidBathCard
-          pool_number={item.pool_number ?? index}
-          remainingTime={item.remaining_time ?? 0}
-          isOccupied={item.is_active}
-          onPress={() => null}
-          company_name={item.company_name ?? ""}
-          product_name={item.product_name ?? ""}
-        />
-      ))}
-    </ScrollView>
+    <>
+      <Appbar.Header>
+        <Appbar.Content title="" />
+        <Appbar.Action icon="logout" onPress={logout} />
+      </Appbar.Header>
+
+      <ScrollView
+        contentContainerStyle={{
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+        }}>
+        {baths.map((item, index) => (
+          <AcidBathCard
+            key={item.pool_number}
+            pool_number={item.pool_number ?? index}
+            remainingTime={item.remaining_time ?? 0}
+            isOccupied={item.is_active}
+            onPress={() => null}
+            company_name={item.company_name ?? ""}
+            product_name={item.product_name ?? ""}
+          />
+        ))}
+      </ScrollView>
+    </>
   );
 }
 

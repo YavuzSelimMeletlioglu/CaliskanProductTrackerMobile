@@ -4,6 +4,7 @@ import { BottomNavigation } from "react-native-paper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { OutgoingGraphsScreen } from "@/src/pages/TotalOutgoings";
 import { NetGraph } from "@/src/pages/NetGraph";
+import { useLocalSearchParams } from "expo-router";
 
 type RouteProps = {
   key: string;
@@ -13,7 +14,8 @@ type RouteProps = {
 
 export default function Owner() {
   const [index, setIndex] = useState(0);
-
+  const { email } = useLocalSearchParams<{ email: string }>();
+  console.log(email);
   const routes: RouteProps[] = [
     { key: "all", title: "Tüm Gelenler", icon: "login" },
     { key: "outgoings", title: "Tüm Gidenler", icon: "outbox" },
@@ -23,13 +25,13 @@ export default function Owner() {
   const renderScene = ({ route }: { route: RouteProps }) => {
     switch (route.key) {
       case "all":
-        return <IncomingGraphsScreen />;
+        return <IncomingGraphsScreen email={email} />;
       case "outgoings":
-        return <OutgoingGraphsScreen />;
+        return <OutgoingGraphsScreen email={email} />;
       case "net":
-        return <NetGraph />;
+        return <NetGraph email={email} />;
       default:
-        return <IncomingGraphsScreen />;
+        return <IncomingGraphsScreen email={email} />;
     }
   };
 
