@@ -1,11 +1,4 @@
-import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
+import { Modal, View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { PieChart, pieDataItem } from "react-native-gifted-charts";
 import { useEffect, useState } from "react";
 import { post } from "@/src/api/api";
@@ -29,7 +22,7 @@ export function ProductAssignmentPie({
 
   const fetchData = async () => {
     setLoading(true);
-    const response = await post("assignments/filter-strict", {
+    const response = await post("assignments/get-product-assignments", {
       company_id,
       product_id,
     });

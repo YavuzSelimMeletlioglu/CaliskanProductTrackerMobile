@@ -6,6 +6,7 @@ import {
   Alert,
   StyleSheet,
   Pressable,
+  View,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { deleteRequest, get, post } from "@/src/api/api";
@@ -28,6 +29,7 @@ export function AddProcessorAssignment({
   const [showCraneOverlookers, setShowCraneOverlookers] = useState(false);
   const [craneOverlookers, setCraneOverlookers] = useState<any[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState<number>(0);
+  const [recommendedEmployee, setRecommendedEmployee] = useState<number>(0);
   const [quantity, setQuantity] = useState<string>("");
 
   const [dueDate, setDueDate] = useState<Date | null>(null);
@@ -95,8 +97,16 @@ export function AddProcessorAssignment({
     }
   };
 
+  const fetchRecommendation = async () => {
+    const response = await post("assignments/recommendation", {});
+    if (response && response.success) {
+      setRecommendedEmployee(response.data.user_id);
+    }
+  };
+
   useEffect(() => {
     isAdmin && fetchOverlookers();
+    isAdmin && fetchRecommendation();
   }, []);
 
   useEffect(() => {
@@ -107,10 +117,31 @@ export function AddProcessorAssignment({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss} style={styles.dialog}>
-        <Dialog.Title>Görev Ata</Dialog.Title>
+        <Dialog.Title>{isAdmin ? "Görev Ata" : "Süreci Başlat"}</Dialog.Title>
         <Dialog.Content>
           {isAdmin && (
             <>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  columnGap: 5,
+                }}>
+                <Text style={styles.recommendad}>En müsait çalışan:</Text>
+                <Text
+                  style={[
+                    styles.recommendad,
+                    {
+                      color: "green",
+                    },
+                  ]}>
+                  {
+                    craneOverlookers.find((c) => c.id === recommendedEmployee)
+                      ?.name
+                  }
+                </Text>
+              </View>
               <Text style={styles.label}>Çalışan:</Text>
               <Button
                 title={
@@ -198,5 +229,8 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 12,
     marginBottom: 4,
+  },
+  recommendad: {
+    fontWeight: "600",
   },
 });

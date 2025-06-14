@@ -41,7 +41,7 @@ export function OutgoingGraphsScreen({ email }: GraphScreenProps) {
     <Provider>
       <Appbar.Header>
         <Appbar.Content title="Net Giden Ürünler" />
-        <Appbar.Action icon="file-pdf-box" onPress={extractPdf} />
+        <Appbar.Action icon="file-pdf-box" onPress={extractPdf} size={30} />
         <Appbar.Action icon="logout" onPress={logout} />
       </Appbar.Header>
       <ScrollView
