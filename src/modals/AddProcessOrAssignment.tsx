@@ -71,12 +71,6 @@ export function AddProcessorAssignment({
         });
       }
       response = await post("operations/processes", process_payload);
-
-      await post("pools/assign-to-pool", {
-        company_id: company_id,
-        product_id: product_id,
-        bath_time: response.bath_time,
-      });
     }
 
     if (response.success) {

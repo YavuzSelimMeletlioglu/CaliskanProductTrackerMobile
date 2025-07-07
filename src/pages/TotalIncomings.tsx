@@ -32,7 +32,7 @@ export function IncomingGraphsScreen({ email }: GraphScreenProps) {
   }, []);
 
   const extractPdf = async () => {
-    await post("send-multi-company-report", {
+    await post("send-company-report", {
       email: email,
       endpoint_type: "incoming",
     });
